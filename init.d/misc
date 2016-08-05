@@ -1,0 +1,52 @@
+export PATH=$PATH:~/bin
+
+export HISTSIZE=4500
+export HISTFILESIZE=4500
+export HISTTIMEFORMAT='%F %T '
+
+alias g='git'
+alias ip='ifconfig | grep -e '\''inet [0-9]'\'' | grep -ve '\''inet 127'\'' | awk -F '\'' '\'' '\''{print $2; }'\'' | tr -d '\''\n'\'''
+alias getp='ps axu | grep -v grep | grep '
+alias gdiff='git diff --no-index -- '
+alias save_dotfiles='(cd ~/.dotfiles && (git diff --stat | cat) && git add -A . && git commit -am"saving dotfiles as of $(date +"%d/%m/%Y")" && git push -f origin)'
+alias speedtest='wget -O /dev/null http://speedtest.wdc01.softlayer.com/downloads/test100.zip'
+alias copy_thumbs='echo "![](https://cloud.githubusercontent.com/assets/1674699/4883145/3fd1640a-635f-11e4-87c5-902706e24727.png)![](https://cloud.githubusercontent.com/assets/1674699/4923944/d6e58bda-651e-11e4-82a0-90ce68a4357c.png)" | pbcopy'
+
+function copy() { echo -n $@ | pbcopy; }
+
+function run_in_all () {
+  pattern=$1
+  shift
+  command="$@"
+
+  if [ [ -z "$command" ] || -z "$pattern" ]; then
+    echo "usage: run_in_all <pattern> <command> [args..]"
+    echo "where:"
+    echo "  pattern = a name of a file/folder to look for"
+    echo "  command = a command to run in each children folder when pattern is a readable file/folder"
+  else
+    for D in *; do
+      if [ -d "${D}" ] && [ -r "${D}/${pattern}" ]; then
+        echo "\n--> ${D}"
+          (cd "${D}"; echo $command | bash)
+      else
+        echo "\n--> could not read ${D}/$pattern"
+      fi
+    done
+  fi
+}
+
+function sizes () {
+	du -sk ${1:-*} | sort -nr | while read size fname
+	do
+		for unit in k M G T P E Z Y
+		do
+			if [ $size -lt 1024 ]
+			then
+				echo -e "${size}${unit}\t${fname}"
+				break
+			fi
+			size=$((size/1024))
+		done
+	done
+}
