@@ -18,25 +18,30 @@ alias save_dotfiles='(cd $DOTFILES_DIR && (git diff --stat | cat) && git add -A 
 function copy() { echo -n $@ | pbcopy; }
 
 function run_in_all () {
-  pattern=$1
-  shift
-  command="$@"
-
-  if [ [ -z "$command" ] || -z "$pattern" ]; then
-    echo "usage: run_in_all <pattern> <command> [args..]"
-    echo "where:"
-    echo "  pattern = a name of a file/folder to look for"
-    echo "  command = a command to run in each children folder when pattern is a readable file/folder"
-  else
-    for D in *; do
-      if [ -d "${D}" ] && [ -r "${D}/${pattern}" ]; then
-        echo "\n--> ${D}"
-          (cd "${D}"; echo $command | bash)
-      else
-        echo "\n--> could not read ${D}/$pattern"
-      fi
-    done
-  fi
+	pattern=$1 
+	shift
+	command="$@" 
+	if [ -z "$command" ] || [ -z "$pattern" ]
+	then
+		echo "usage: run_in_all <pattern> <command> [args..]"
+		echo "where:"
+		echo "  pattern = a name of a file/folder to look for"
+		echo "  command = a command to run in each children folder when pattern is a readable file/folder"
+	else
+		for D in *
+		do
+			if [ -d "${D}" ] && [ -r "${D}/${pattern}" ]
+			then
+				echo "\n--> ${D}"
+				(
+					cd "${D}"
+					eval $command
+				)
+			else
+				echo "\n--> could not read ${D}/$pattern"
+			fi
+		done
+	fi
 }
 
 function sizes () {
