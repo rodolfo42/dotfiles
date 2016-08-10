@@ -3,7 +3,7 @@ export DOTFILES_DIR=$(dirname $(readlink -n ~/.bashrc))
 git config --global pull.rebase true
 git config --global alias.co checkout
 git config --global alias.st status
-git config --global alias.pu !"git push --set-upstream origin `git rev-parse --abbrev-ref HEAD`"
+git config --global alias.pu '!git push --set-upstream origin `git rev-parse --abbrev-ref HEAD`'
 
 # global gitignore
 git config --global core.excludesfile $DOTFILES_DIR/.gitignore_global
