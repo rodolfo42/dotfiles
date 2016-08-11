@@ -30,3 +30,6 @@ Temporary Items
 
 # IDEA
 .idea
+
+# running bash/zsh/sh inside docker
+.*sh_history
