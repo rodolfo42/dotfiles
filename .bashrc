@@ -1,8 +1,8 @@
 #!/bin/bash
 
-DIR=`dirname "$(readlink -n "$0")"`
+export DOTFILES_DIR=$(dirname $(readlink -n ~/.bashrc))
 
-for F in $DIR/init.d/*; do
+for F in $DOTFILES_DIR/init.d/*; do
   if [ -r "$F" ]; then
     source $F
   fi

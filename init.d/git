@@ -1,5 +1,3 @@
-export DOTFILES_DIR=$(dirname $(readlink -n ~/.bashrc))
-
 git config --global pull.rebase true
 git config --global alias.co checkout
 git config --global alias.st status
@@ -7,3 +5,8 @@ git config --global alias.pu '!git push --set-upstream origin `git rev-parse --a
 
 # global gitignore
 git config --global core.excludesfile $DOTFILES_DIR/.gitignore_global
+
+alias g='git'
+alias gdiff='git diff --no-index -- '
+
+alias clean_wd="git clean -dfnx | grep -v .idea | sed 's/Would remove //' | xargs rm -rfv"

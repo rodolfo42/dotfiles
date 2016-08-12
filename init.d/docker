@@ -3,8 +3,6 @@
 alias enter_container="docker exec -it \$(docker ps -n 1 -q) /bin/bash"
 alias remove_dangling_images='docker images -q --filter=dangling=true | xargs docker rmi -f'
 
-# eval "$(docker-machine env default)"
-
 function drun() {
   local curdir=$(pwd)
   local image=${1:-ubuntu}

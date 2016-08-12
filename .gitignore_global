@@ -1,5 +1,4 @@
-
-# Created by https://www.gitignore.io
+# Partially created by https://www.gitignore.io
 
 ### OSX ###
 *.DS_Store
@@ -31,5 +30,9 @@ Temporary Items
 # IDEA
 .idea
 
-# running bash/zsh/sh inside docker
-.*sh_history
+# running bash/zsh/sh/node/mysql inside docker
+.*_history
+
+# Node
+npm-debug.log
+.vagrant
