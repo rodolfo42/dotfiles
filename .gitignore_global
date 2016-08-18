@@ -35,4 +35,8 @@ Temporary Items
 
 # Node
 npm-debug.log
+.babel.json
+.node-gyp/
+
+# Misc
 .vagrant
