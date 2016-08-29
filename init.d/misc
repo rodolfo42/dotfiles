@@ -11,7 +11,7 @@ alias copy_thumbs='echo "![](https://cloud.githubusercontent.com/assets/1674699/
 
 alias save_dotfiles='(cd $DOTFILES_DIR && (git diff --stat | cat) && git add -A . && git commit -am"saving dotfiles as of $(date +"%d/%m/%Y")" && git push origin)'
 
-function load_dotfiles() { source $DOTFILES_DIR/.bashrc }
+function load_dotfiles() { source $DOTFILES_DIR/.bashrc; }
 
 function copy() { echo -n $@ | pbcopy; }
 
@@ -42,7 +42,7 @@ function run_in_all () {
 	fi
 }
 
-function sizes () {
+function sizes {
 	du -sk ${1:-*} | sort -nr | while read size fname
 	do
 		for unit in k M G T P E Z Y
