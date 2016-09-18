@@ -7,6 +7,7 @@ export HISTTIMEFORMAT='%F %T '
 alias ip='ifconfig | grep -e '\''inet [0-9]'\'' | grep -ve '\''inet 127'\'' | awk -F '\'' '\'' '\''{print $2; }'\'' | tr -d '\''\n'\'''
 alias getp='ps axu | grep -v grep | grep '
 alias speedtest='wget -O /dev/null http://speedtest.wdc01.softlayer.com/downloads/test100.zip'
+alias speedtest-ber='wget -O /dev/null "http://speed.syseleven.net/random4000x4000.jpg?x=$(date +%s)"'
 alias copy_thumbs='echo "![](https://cloud.githubusercontent.com/assets/1674699/4883145/3fd1640a-635f-11e4-87c5-902706e24727.png)![](https://cloud.githubusercontent.com/assets/1674699/4923944/d6e58bda-651e-11e4-82a0-90ce68a4357c.png)" | pbcopy'
 
 alias save_dotfiles='(cd $DOTFILES_DIR && (git diff --stat | cat) && git add -A . && git commit -am"saving dotfiles as of $(date +"%d/%m/%Y")" && git push origin)'

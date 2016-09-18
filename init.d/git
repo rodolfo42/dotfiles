@@ -6,6 +6,14 @@ function bootstrap_git() {
 
   # global gitignore
   git config --global core.excludesfile $DOTFILES_DIR/.gitignore_global
+
+  # turn of advices
+  git config --global advice.pushnonfastforward false
+  git config --global advice.statushints false
+  git config --global advice.commitbeforemerge false
+  git config --global advice.resolveconflict false
+  git config --global advice.implicitidentity false
+  git config --global advice.detachedhead false
 }
 
 alias g='git'
