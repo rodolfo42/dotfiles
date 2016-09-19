@@ -13,6 +13,11 @@ alias speedtest-ber='wget -O /dev/null "http://speed.syseleven.net/random4000x40
 alias ip='ifconfig | grep -e '\''inet [0-9]'\'' | grep -ve '\''inet 127'\'' | awk -F '\'' '\'' '\''{print $2; }'\'' | tr -d '\''\n'\'''
 alias fastping='prettyping --nounicode -i 0.1'
 
+function install_prettyping() {
+	(mkdir -p ~/bin && cd ~/bin && curl -O https://raw.githubusercontent.com/denilsonsa/prettyping/master/prettyping)
+	chmod +x ~/bin/prettyping
+}
+
 alias save_dotfiles='(cd $DOTFILES_DIR && (git diff --stat | cat) && git add -A . && git commit -am"saving dotfiles as of $(date +"%d/%m/%Y")" && git push origin)'
 
 function load_dotfiles() { source $DOTFILES_DIR/.bashrc; }
