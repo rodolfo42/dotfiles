@@ -10,8 +10,8 @@ alias copy_thumbs='echo "![](https://cloud.githubusercontent.com/assets/1674699/
 
 alias speedtest='wget -O /dev/null http://speedtest.wdc01.softlayer.com/downloads/test100.zip'
 alias speedtest-ber='wget -O /dev/null "http://speed.syseleven.net/random4000x4000.jpg?x=$(date +%s)"'
-alias fastping='ping -i 0.3'
 alias ip='ifconfig | grep -e '\''inet [0-9]'\'' | grep -ve '\''inet 127'\'' | awk -F '\'' '\'' '\''{print $2; }'\'' | tr -d '\''\n'\'''
+alias fastping='prettyping --nounicode -i 0.1'
 
 alias save_dotfiles='(cd $DOTFILES_DIR && (git diff --stat | cat) && git add -A . && git commit -am"saving dotfiles as of $(date +"%d/%m/%Y")" && git push origin)'
 
