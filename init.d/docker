@@ -5,7 +5,7 @@ alias remove_dangling_images='docker images -q --filter=dangling=true | xargs do
 alias remove_containers='docker ps -aq | xargs docker rm -f'
 alias d='docker'
 
-function drun() {
+function d-run() {
   local curdir=$(pwd)
   local image=${1:-ubuntu}
   shift

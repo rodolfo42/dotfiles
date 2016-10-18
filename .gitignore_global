@@ -38,6 +38,7 @@ npm-debug.log
 .babel.json
 .node-gyp/
 .npmrc
+.npm/
 
 # Misc
 .vagrant
