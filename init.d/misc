@@ -18,10 +18,6 @@ function install_prettyping() {
 	chmod +x ~/bin/prettyping
 }
 
-alias save_dotfiles='(cd $DOTFILES_DIR && (git diff --stat | cat) && git add -A . && git commit -am"saving dotfiles as of $(date +"%d/%m/%Y")" && git push origin)'
-
-function load_dotfiles() { source $DOTFILES_DIR/.bashrc; }
-
 function copy() { echo -n $@ | pbcopy; }
 
 function run_in_all () {
