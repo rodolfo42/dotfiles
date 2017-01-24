@@ -40,5 +40,7 @@ npm-debug.log
 .npmrc
 .npm/
 
+.workspace.js
+
 # Misc
 .vagrant
