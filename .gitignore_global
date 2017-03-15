@@ -44,3 +44,12 @@ npm-debug.log
 
 # Misc
 .vagrant
+
+### Terraform ###
+# Compiled files
+*.tfstate
+*.tfstate.backup
+.terraform.d
+
+# Module directory
+.terraform/
