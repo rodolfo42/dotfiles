@@ -13,6 +13,10 @@ alias speedtest-ber='wget -O /dev/null "http://speed.syseleven.net/random4000x40
 alias ip='ifconfig | grep -e '\''inet [0-9]'\'' | grep -ve '\''inet 127'\'' | awk -F '\'' '\'' '\''{print $2; }'\'' | tr -d '\''\n'\'''
 alias fastping='prettyping --nounicode -i 0.1'
 
+function timestamp() {
+  date -j -f '%Y-%m-%d %H:%M:%S' "$1" +%s
+}
+
 function install_prettyping() {
 	(mkdir -p ~/bin && cd ~/bin && curl -O https://raw.githubusercontent.com/denilsonsa/prettyping/master/prettyping)
 	chmod +x ~/bin/prettyping
