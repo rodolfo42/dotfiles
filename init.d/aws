@@ -1,0 +1,20 @@
+#!/bin/bash -e
+
+function s3load() {
+  while test -z "$BUCKET_NAME"; do
+    echo -n "BUCKET_NAME: "
+    read BUCKET_NAME
+  done
+
+  file=${1:-""}
+  if test "$2"; then key=$2 else; key=$(basename "$file") fi
+
+  if ! test -f "$file"; then
+    echo "file [$file] not found"
+  else
+    aws s3 cp "$file" "s3://$BUCKET_NAME/$key" --acl public-read --profile upload-s3
+    echo
+    echo "https://s3.amazonaws.com/$BUCKET_NAME/$key"
+    echo
+  fi
+}

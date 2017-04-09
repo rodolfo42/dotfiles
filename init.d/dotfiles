@@ -1,3 +1,5 @@
+#!/bin/bash -e
+
 function dotfiles_save() {
   cd $DOTFILES_DIR &&
   (git diff --stat | cat) &&
