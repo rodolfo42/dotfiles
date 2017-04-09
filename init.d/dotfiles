@@ -11,12 +11,14 @@ function dotfiles_save() {
 }
 
 function dotfiles_load() {
-  source $DOTFILES_DIR/.bashrc
+  (source $DOTFILES_DIR/.bashrc)
 }
 
 function dotfiles_pull() {
-  cd $DOTFILES_DIR &&
-  git stash -u &&
-  git pull --rebase origin master &&
-  g stash pop
+  (
+    cd $DOTFILES_DIR &&
+    git stash -u &&
+    git pull --rebase origin master &&
+    g stash pop
+  )
 }
