@@ -1,11 +1,13 @@
 #!/bin/bash -e
 
 function dotfiles_save() {
-  cd $DOTFILES_DIR &&
-  (git diff --stat | cat) &&
-  git add -A . &&
-  git commit -am"saving dotfiles as of $(date +"%d/%m/%Y")" &&
-  git push origin
+  (
+    cd $DOTFILES_DIR &&
+    (git diff --stat | cat) &&
+    git add -A . &&
+    git commit -am"saving dotfiles as of $(date +"%d/%m/%Y")" &&
+    git push origin
+  )
 }
 
 function dotfiles_load() {
