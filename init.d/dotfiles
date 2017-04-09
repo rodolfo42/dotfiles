@@ -11,7 +11,7 @@ function dotfiles_save() {
 }
 
 function dotfiles_load() {
-  (source $DOTFILES_DIR/.bashrc)
+  source $DOTFILES_DIR/.bashrc
 }
 
 function dotfiles_pull() {
