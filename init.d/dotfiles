@@ -19,6 +19,6 @@ function dotfiles_pull() {
     cd $DOTFILES_DIR &&
     git stash -u &&
     git pull --rebase origin master &&
-    g stash pop
+    git stash pop
   )
 }
