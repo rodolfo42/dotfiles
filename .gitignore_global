@@ -53,3 +53,7 @@ npm-debug.log
 
 # Module directory
 .terraform/
+.secrets/
+
+## virtualenv
+.venv
