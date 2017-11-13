@@ -13,6 +13,7 @@ Cloning into '~/.dotfiles'...
 Checking connectivity... done.
 
 $ ln -sf ~/.dotfiles/.bashrc ~/.bashrc
+$ ln -sf ~/.dotfiles/.gitignore_global ~/.gitconfig_global
 ```
 
 ## updating
