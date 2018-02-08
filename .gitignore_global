@@ -55,5 +55,6 @@ npm-debug.log
 .terraform/
 .secrets/
 
-## virtualenv
+## python
 .venv
+.pytest_cache

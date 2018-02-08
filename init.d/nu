@@ -1,0 +1,5 @@
+alias nhome='cd $NU_HOME'
+
+function switch-virtual-env() {
+  source $NU_HOME/virtualenvs/$1/bin/activate
+}
