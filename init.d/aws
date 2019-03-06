@@ -18,3 +18,7 @@ function s3load() {
     echo
   fi
 }
+
+function s3_object_sizes() {
+  aws s3 ls $1 | awk -F ' ' '{ print $3; }' | xargs gnumfmt --to=si | uniq -c
+}

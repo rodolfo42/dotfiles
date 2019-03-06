@@ -58,3 +58,4 @@ npm-debug.log
 ## python
 .venv
 .pytest_cache
+.virtualenv
