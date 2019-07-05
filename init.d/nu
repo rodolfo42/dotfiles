@@ -1,3 +1,5 @@
 alias nhome='cd $NU_HOME'
 # unset -f nu
 # unset -f python
+
+source $HOME/.nurc

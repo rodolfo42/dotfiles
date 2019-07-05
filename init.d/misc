@@ -1,12 +1,14 @@
 #!/bin/bash -e
 
-export PATH=$PATH:~/bin
+export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 export HISTSIZE=45000
 export HISTFILESIZE=45000
 export HISTTIMEFORMAT='%F %T '
 
-PS1='%{$fg[cyan]%}%c%{$reset_color%} $(git_prompt_info)%{$reset_color%}$ '
+if (echo $SHELL | grep -Eq zsh); then
+  PS1='%{$fg[cyan]%}%c%{$reset_color%} $(git_prompt_info)%{$reset_color%}$ '
+fi
 
 alias getp='ps axu | grep -v grep | grep -i '
 
@@ -56,7 +58,7 @@ function run_in_all () {
 }
 
 function sizes {
-	du -sk ${1:-*} | sort -nr | while read size fname
+	gdu -ad1 $1 | sort -nr | while read size fname
 	do
 		for unit in k M G T P E Z Y
 		do
