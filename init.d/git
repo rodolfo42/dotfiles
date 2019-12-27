@@ -19,6 +19,11 @@ function bootstrap_git() {
   git config --global advice.resolveconflict false
   git config --global advice.implicitidentity false
   git config --global advice.detachedhead false
+
+  # gpg setup
+  if [[ -x "$(which gpg)" ]]; then
+    git config --global gpg.program "$(which gpg)"
+  fi
 }
 
 alias g='git'
