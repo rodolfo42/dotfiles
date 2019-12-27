@@ -6,6 +6,8 @@ export HISTSIZE=45000
 export HISTFILESIZE=45000
 export HISTTIMEFORMAT='%F %T '
 
+export LC_ALL=en_US.UTF-8
+
 if (echo $SHELL | grep -Eq zsh); then
   PS1='%{$fg[cyan]%}%c%{$reset_color%} $(git_prompt_info)%{$reset_color%}$ '
 fi

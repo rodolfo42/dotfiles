@@ -1,5 +1,7 @@
-alias nhome='cd $NU_HOME'
 # unset -f nu
 # unset -f python
 
-source $HOME/.nurc
+alias nhome='cd $NU_HOME'
+if [ -f "$HOME/.nurc" ]; then
+  source $HOME/.nurc
+fi

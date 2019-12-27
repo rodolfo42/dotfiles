@@ -13,7 +13,7 @@ function s3load() {
     key=$(basename "$file")
   fi
 
-  if [[ -f "$file" ]]; then
+  if [[ ! -f "$file" ]]; then
     echo "file [$file] not found"
   else
     aws s3 cp "$file" "s3://$BUCKET_NAME/$key" --acl public-read --profile upload-s3
