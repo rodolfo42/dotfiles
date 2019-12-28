@@ -1,0 +1,29 @@
+PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+PATH="/usr/local/opt/ed/libexec/gnubin:$PATH"
+PATH="/usr/local/opt/findutils/libexec/gnubin:$PATH"
+PATH="/usr/local/opt/gnu-indent/libexec/gnubin:$PATH"
+PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
+PATH="/usr/local/opt/gnu-tar/libexec/gnubin:$PATH"
+PATH="/usr/local/opt/gnu-which/libexec/gnubin:$PATH"
+PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"
+
+function setup_gnu {
+  brew update
+  brew install \
+    coreutils \
+    binutils \
+    diffutils \
+    ed \
+    findutils \
+    gawk \
+    gnu-indent \
+    gnu-sed \
+    gnu-tar \
+    gnu-which \
+    gnutls \
+    grep \
+    gzip \
+    screen \
+    watch \
+    wget
+}
