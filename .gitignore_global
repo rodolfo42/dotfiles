@@ -29,6 +29,7 @@ Temporary Items
 
 # IDEA
 .idea
+*.iml
 
 # running bash/zsh/sh/node/mysql inside docker
 .*_history
@@ -59,3 +60,22 @@ npm-debug.log
 .venv
 .pytest_cache
 .virtualenv
+
+
+### Clojure ###
+pom.xml
+pom.xml.asc
+*.jar
+*.class
+/lib/
+/classes/
+/target/
+/checkouts/
+.lein-deps-sum
+.lein-repl-history
+.lein-plugins/
+.lein-failures
+.nrepl-port
+.nrepl-history
+.cpcache/
+.clj-kondo/.cache/
