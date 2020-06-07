@@ -29,6 +29,7 @@ Temporary Items
 
 # IDEA
 .idea
+*.iml
 
 # running bash/zsh/sh/node/mysql inside docker
 .*_history
@@ -59,3 +60,5 @@ npm-debug.log
 .venv
 .pytest_cache
 .virtualenv
+
+._etc
