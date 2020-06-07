@@ -8,11 +8,14 @@ export HISTTIMEFORMAT='%F %T '
 
 alias less="less -N"
 
+export LC_ALL=en_US.UTF-8
+
 if (echo $SHELL | grep -Eq zsh); then
   PS1='%{$fg[cyan]%}%c%{$reset_color%} $(git_prompt_info)%{$reset_color%}$ '
 fi
 
 alias getp='ps axu | grep -v grep | grep -i '
+alias dev='cd ~/Documents/dev'
 
 alias copy_thumbs='echo "![](https://cloud.githubusercontent.com/assets/1674699/4883145/3fd1640a-635f-11e4-87c5-902706e24727.png)![](https://cloud.githubusercontent.com/assets/1674699/4923944/d6e58bda-651e-11e4-82a0-90ce68a4357c.png)" | pbcopy'
 
