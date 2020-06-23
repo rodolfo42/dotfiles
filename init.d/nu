@@ -5,3 +5,63 @@ alias nhome='cd $NU_HOME'
 if [ -f "$HOME/.nurc" ]; then
   source $HOME/.nurc
 fi
+
+function awspwd() {
+  alias=$1
+  sudo security find-internet-password \
+    -a rodolfo.ferreira -gs "$alias.signin.aws.amazon.com" \
+    ~/Library/Keychains/aws.keychain-db 2>&1 \
+    | grep "password:" \
+    | sed -e 's/password: //g' \
+    | tr -d '"' \
+    | pbcopy
+}
+
+function remove_pr() {
+  pr_number=$1
+
+  curl -s -XPOST -H"Authorization: token $GITHUB_TOKEN" -H'Accept: application/json' -H'Content-type: application/json' \
+    https://api.github.com/repos/nubank/itaipu/issues/$pr_number/comments -d '{"body": "bors r-"}' | jq '.'
+
+  echo "https://github.com/nubank/itaipu/pull/$pr_number"
+  sleep 1
+}
+
+function queue_pr() {
+  pr_number=$1
+
+  # curl -s -XPUT -H"Authorization: token $GITHUB_TOKEN" -H'Accept: application/vnd.github.lydian-preview+json' \
+  # https://api.github.com/repos/nubank/itaipu/pulls/$pr_number/update-branch | jq '.'
+
+  sleep 1
+
+  curl -s -XPOST -H"Authorization: token $GITHUB_TOKEN" -H'Accept: application/json' -H'Content-type: application/json' \
+    https://api.github.com/repos/nubank/itaipu/issues/$pr_number/comments -d '{"body": "bors r+"}' | jq '.'
+
+  echo "https://github.com/nubank/itaipu/pull/$pr_number"
+}
+
+function approve_pr() {
+  set -e
+  pr_number=$1
+
+  echo "adding ready for merge"
+  curl -s -XPOST -H"Authorization: token $GITHUB_TOKEN" -H'Accept: application/json' -H'Content-type: application/json' \
+    https://api.github.com/repos/nubank/itaipu/issues/$pr_number/labels -d '{"labels": ["-PR Ready For Merge"]}' | jq '.[].name'
+
+  sleep 1
+
+  echo "removing review requested"
+  curl -s -XDELETE -H"Authorization: token $GITHUB_TOKEN" -H'Accept: application/json' -H'Content-type: application/json' \
+    https://api.github.com/repos/nubank/itaipu/issues/$pr_number/labels/-PR%20Review%20Requested | jq '.[].name'
+
+  sleep 3
+
+  echo "approving PR and bors r+"
+  curl -s -XPOST -H"Authorization: token $GITHUB_TOKEN" -H'Accept: application/json' -H'Content-type: application/json' \
+    https://api.github.com/repos/nubank/itaipu/pulls/$pr_number/reviews -d '{"body": "bors r+", "event": "APPROVE"}' | jq '.'
+
+  echo "Done!"
+  echo "https://github.com/nubank/itaipu/pull/$pr_number"
+  set +e
+}
