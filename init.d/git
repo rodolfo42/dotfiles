@@ -26,7 +26,4 @@ function bootstrap_git() {
   fi
 }
 
-alias g='git'
 alias gdiff='git diff --no-index -- '
-
-alias clean_wd="git clean -dfnx | grep -v .idea | sed 's/Would remove //' | xargs rm -rfv"
