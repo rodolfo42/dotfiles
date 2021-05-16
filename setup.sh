@@ -1,51 +1,76 @@
-#!/bin/zsh -e
+#!/bin/zsh
 
-desc="\u001b[32m"
-cmd="\u001b[36m"
-reset="\u001b[0m"
+color_desc="\033[36m\u27F3 "
+color_cmd="\033[30;1m"
+reset="\033[0m"
 
-echo -e "${desc}[1] Linking .bashrc"
-echo -e "${cmd}ln -sf ~/.dotfiles/.bashrc ~/.bashrc${reset}"
-ln -sf ~/.dotfiles/.bashrc ~/.bashrc
-echo
+success="\033[32m\u2713 "
+fail="\033[31m\u2717 "
 
+function describe_step {
+  desc_txt="$1"
+  shift
+  cmd=$@
 
-echo
-echo -e "${desc}[2] Linking .gitignore_global"
-echo -e "${cmd}ln -sf ~/.dotfiles/.gitignore_global ~/.gitconfig_global${reset}"
-ln -sf ~/.dotfiles/.gitignore_global ~/.gitconfig_global
-echo
+  echo -e "${color_desc}${desc_txt}${reset}"
+  output=$(eval $cmd 2>&1)
+  exit_code=$?
+  # TODO figure out how to tee + get original exit code + save output in a variable
+  echo $output >> $HOME/.dotfiles/setup.log
 
+  # back one line and clear it
+  echo -e "\033[2A" && echo -en "\033[2K"
 
-echo
-echo -e "${desc}[3] Linking r42.zsh-theme"
-echo -e "${cmd}ln -sf ~/.dotfiles/r42.zsh-theme ~/.oh-my-zsh/custom/themes/z42.zsh-theme${reset}"
-ln -sf ~/.dotfiles/r42.zsh-theme ~/.oh-my-zsh/custom/themes/z42.zsh-theme
-echo
+  if [ $exit_code -eq "0" ]; then
+    echo -en "${success}${desc_txt}"
+  else
+    echo -e "${fail}${desc_txt}${reset}"
+    echo -e "${color_cmd}${cmd}${reset}"
+    echo $output
+    echo
+    echo -e "${fail}Aborting, see above output before continuing"
+    exit $exit_code
+  fi
+  echo -e "${reset}"
+}
 
-### Set up ###
+function step {
+  describe_step "$*" $@
+}
 
-# Install homebrew
-# /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+function skip {
+  describe_step $1
+}
+
+describe_step "Check for .zshrc file" test -f ~/.zshrc
+
+describe_step "Check for .oh-my-zsh folder" test -d ~/.oh-my-zsh
+
+step ln -sf ~/.dotfiles/.bashrc ~/.bashrc
+
+step ln -sf ~/.dotfiles/.gitignore_global ~/.gitignore_global
+
+step ln -sf ~/.dotfiles/r42.zsh-theme ~/.oh-my-zsh/custom/themes/z42.zsh-theme
+
+describe_step "Set zsh theme to r42" sed -i "'s/ZSH_THEME=\([^ ]\+\)$/ZSH_THEME=\"r42\"/'" ~/.zshrc
+
+if [ -x "$(which brew)" ]; then
+  skip "Skipping homebrew installation"
+else
+  step curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
+fi
+
+step brew tap homebrew/bundle
+
+step brew bundle --file ~/.dotfiles/Brewfile
+
+step brew uninstall --ignore-dependencies python
 
 ### Python ###
-# brew install pyenv
-# pyenv install 3.7.9
-# pyenv global 3.7.9
+step pyenv install --skip-existing 3.7.9
+step pyenv global 3.7.9
 
-### Brew formulas ###
-# brew install coreutils httpie
-# brew install fd the_silver_searcher z 
-# brew install npm clojure leiningen
+describe_step "Include .bashrc in .zshrc" "grep -qxF 'source ~/.bashrc' ~/.zshrc || echo 'source ~/.bashrc' >> ~/.zshrc"
 
-# brew install --cask stats
-# brew install --cask adoptopenjdk14
-# brew install --cask docker
-
-### GNU utils ###
-
-# brew install coreutils binutils diffutils ed findutils \
-#     gawk gnu-indent gnu-sed gnu-tar gnu-which gnutls grep \
-#     gzip watch wget
-
-echo -e "${desc}[4] Set r42.zsh-theme"
+echo
+echo -e "-> Log available in: $HOME/.dotfiles/setup.log"
