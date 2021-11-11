@@ -2,9 +2,12 @@
 
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-export HISTSIZE=45000
-export HISTFILESIZE=45000
-export HISTTIMEFORMAT='%F %T '
+
+export HISTFILESIZE=1000000000
+export HISTSIZE=1000000000
+
+setopt HIST_FIND_NO_DUPS
+setopt INC_APPEND_HISTORY
 
 alias less="less -N"
 alias ls='ls -G --color'
