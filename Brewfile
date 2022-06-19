@@ -1,6 +1,5 @@
 # utils
 brew 'git'
-brew 'coreutils'
 brew 'fd'
 brew 'jq'
 brew 'the_silver_searcher'
@@ -21,7 +20,6 @@ brew 'binutils'
 brew 'diffutils'
 brew 'ed'
 brew 'findutils'
-brew 'httpie'
 brew 'watch'
 brew 'wget'
 
@@ -31,14 +29,11 @@ brew 'npm'
 brew 'clojure'
 brew 'leiningen'
 
-# taps
-tap "adoptopenjdk/openjdk"
-
 # cask
 cask_args appdir: '/Applications'
 cask 'stats'
-cask 'adoptopenjdk14'
 cask 'docker'
+cask 'temurin'
 
 # cask 'google-chrome'
 # cask 'slack'

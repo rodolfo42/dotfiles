@@ -46,29 +46,31 @@ describe_step "Check for .zshrc file" test -f ~/.zshrc
 
 describe_step "Check for .oh-my-zsh folder" test -d ~/.oh-my-zsh
 
-step ln -sf ~/.dotfiles/.bashrc ~/.bashrc
+step /bin/ln -sf ~/.dotfiles/.bashrc ~/.bashrc
 
-step ln -sf ~/.dotfiles/.gitignore_global ~/.gitignore_global
+step /bin/ln -sf ~/.dotfiles/.gitignore_global ~/.gitignore_global
 
-step ln -sf ~/.dotfiles/r42.zsh-theme ~/.oh-my-zsh/custom/themes/z42.zsh-theme
+step /bin/ln -sf ~/.dotfiles/r42.zsh-theme ~/.oh-my-zsh/themes/r42.zsh-theme
 
-describe_step "Set zsh theme to r42" sed -i "'s/ZSH_THEME=\([^ ]\+\)$/ZSH_THEME=\"r42\"/'" ~/.zshrc
+describe_step "Set zsh theme to r42" /usr/bin/sed -i \'\' "'s/ZSH_THEME=\([^ ]\+\)$/ZSH_THEME=\"r42\"/'" ~/.zshrc
 
 if [ -x "$(which brew)" ]; then
   skip "Skipping homebrew installation"
 else
-  step curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
+  echo "Installing homebrew"
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
 step brew tap homebrew/bundle
 
 step brew bundle --file ~/.dotfiles/Brewfile
 
-step brew uninstall --ignore-dependencies python
-
 ### Python ###
-step pyenv install --skip-existing 3.7.9
-step pyenv global 3.7.9
+[ ! -f "/usr/local/bin/python" ] || step brew uninstall --ignore-dependencies python
+
+step pyenv install --skip-existing 3.10.4
+
+step pyenv global 3.10.4
 
 describe_step "Include .bashrc in .zshrc" "grep -qxF 'source ~/.bashrc' ~/.zshrc || echo 'source ~/.bashrc' >> ~/.zshrc"
 
