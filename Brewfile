@@ -5,6 +5,7 @@ brew 'jq'
 brew 'ripgrep'
 brew 'z'
 brew 'neovim'
+brew 'clojure-lsp/brew/clojure-lsp-native'
 
 # GNU
 brew 'gawk'
