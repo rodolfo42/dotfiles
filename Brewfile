@@ -2,8 +2,9 @@
 brew 'git'
 brew 'fd'
 brew 'jq'
-brew 'the_silver_searcher'
+brew 'ripgrep'
 brew 'z'
+brew 'neovim'
 
 # GNU
 brew 'gawk'
