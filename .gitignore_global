@@ -78,3 +78,5 @@ pom.xml.asc
 .nrepl-history
 .cpcache/
 .clj-kondo/.cache/
+
+.vscode

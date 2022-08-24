@@ -1152,12 +1152,12 @@
   "system": {
     "macos": {
       "big_sur": {
-        "HOMEBREW_VERSION": "3.3.3-74-g53f890b",
+        "HOMEBREW_VERSION": "3.5.2-109-g9416032",
         "HOMEBREW_PREFIX": "/usr/local",
-        "Homebrew/homebrew-core": "0b523ada98dd84da74bf3a3edd0cc47702e4c1da",
+        "Homebrew/homebrew-core": "7c5ebf8c4b7c37f3ac5e9f2ef81d968348f71498",
         "CLT": "12.5.0.22.9",
-        "Xcode": "13.1",
-        "macOS": "11.6"
+        "Xcode": "13.2.1",
+        "macOS": "11.6.5"
       },
       "monterey": {
         "HOMEBREW_VERSION": "3.5.2",
