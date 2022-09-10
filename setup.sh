@@ -7,19 +7,22 @@ reset="\033[0m"
 success="\033[32m\u2713 "
 fail="\033[31m\u2717 "
 
+echo "\n=== $(date)\n" >> $HOME/.dotfiles/setup.log
+
 function describe_step {
   desc_txt="$1"
   shift
   cmd=$@
 
   echo -e "${color_desc}${desc_txt}${reset}"
-  output=$(eval $cmd 2>&1)
+  # output=$(eval $cmd 2>&1)
+  eval $cmd 2>&1 | tee -a $HOME/.dotfiles/setup.log
   exit_code=$?
   # TODO figure out how to tee + get original exit code + save output in a variable
-  echo $output >> $HOME/.dotfiles/setup.log
+  # echo $output >> $HOME/.dotfiles/setup.log
 
   # back one line and clear it
-  echo -e "\033[2A" && echo -en "\033[2K"
+  # echo -e "\033[2A" && echo -en "\033[2K"
 
   if [ $exit_code -eq "0" ]; then
     echo -en "${success}${desc_txt}"
@@ -42,6 +45,11 @@ function skip {
   describe_step $1
 }
 
+function set_theme {
+  local theme=$1
+  sed -i '.bak' s/^ZSH_THEME=".*"$/ZSH_THEME=\"$theme\"/g ~/.zshrc
+}
+
 describe_step "Check for .zshrc file" test -f ~/.zshrc
 
 describe_step "Check for .oh-my-zsh folder" test -d ~/.oh-my-zsh
@@ -52,13 +60,14 @@ step /bin/ln -sf ~/.dotfiles/.gitignore_global ~/.gitignore_global
 
 step /bin/ln -sf ~/.dotfiles/r42.zsh-theme ~/.oh-my-zsh/themes/r42.zsh-theme
 
-describe_step "Set zsh theme to r42" /usr/bin/sed -i \'\' "'s/ZSH_THEME=\([^ ]\+\)$/ZSH_THEME=\"r42\"/'" ~/.zshrc
+describe_step "Set zsh theme to r42" set_theme "r42"
 
 if [ -x "$(which brew)" ]; then
   skip "Skipping homebrew installation"
 else
   echo "Installing homebrew"
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
 step brew tap homebrew/bundle
