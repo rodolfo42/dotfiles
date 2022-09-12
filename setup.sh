@@ -57,6 +57,16 @@ function install_prettyping {
   fi
 }
 
+function install_aws {
+  if (which aws > /dev/null); then
+    echo "Skipping AWS CLI installation"
+  else
+    curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "/tmp/AWSCLIV2.pkg"
+    sudo installer -pkg /tmp/AWSCLIV2.pkg -target /
+    rm -rf /tmp/AWSCLIV2.pkg
+  fi
+}
+
 describe_step "Check for .zshrc file" test -f ~/.zshrc
 
 describe_step "Check for .oh-my-zsh folder" test -d ~/.oh-my-zsh
@@ -82,15 +92,19 @@ step brew tap homebrew/bundle
 step brew bundle --file ~/.dotfiles/Brewfile
 
 ### Python ###
-[ ! -f "/usr/local/bin/python" ] || step brew uninstall --ignore-dependencies python
+[ -f "/opt/homebrew/bin/python3" ] && step brew uninstall --ignore-dependencies python
 
 step pyenv install --skip-existing 3.10.6
 
 step pyenv global 3.10.6
 
-describe_step "Include .bashrc in .zshrc" "grep -qxF 'source ~/.bashrc' ~/.zshrc || echo 'source ~/.bashrc' >> ~/.zshrc"
+describe_step "Upgrade pip" pyenv exec pip install --upgrade pip
 
 describe_step "Install prettyping" install_prettyping
+
+describe_step "Install AWS CLI" install_aws
+
+describe_step "Include .bashrc in .zshrc" "grep -qxF 'source ~/.bashrc' ~/.zshrc || echo 'source ~/.bashrc' >> ~/.zshrc"
 
 echo
 echo -e "-> Log available in: $HOME/.dotfiles/setup.log"
