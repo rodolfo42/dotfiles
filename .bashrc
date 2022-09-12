@@ -2,6 +2,12 @@
 
 export DOTFILES_DIR=$(dirname $(readlink -n ~/.bashrc))
 
+for F in $DOTFILES_DIR/init.d/*; do
+  if [ -r "$F" ]; then
+    source $F
+  fi
+done
+
 # lein
 export LEIN_SUPPRESS_USER_LEVEL_REPO_WARNINGS=true
 export LEIN_JVM_OPTS="-XX:+TieredCompilation -XX:TieredStopAtLevel=1"
