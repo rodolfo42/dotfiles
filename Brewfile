@@ -4,8 +4,9 @@ brew 'fd'
 brew 'jq'
 brew 'ripgrep'
 brew 'z'
+brew 'ncdu'
 brew 'neovim'
-brew 'clojure-lsp/brew/clojure-lsp-native'
+brew 'bat'
 
 # GNU
 brew 'gawk'
@@ -29,6 +30,7 @@ brew 'wget'
 brew 'pyenv'
 brew 'npm'
 brew 'clojure'
+brew 'clojure-lsp/brew/clojure-lsp-native'
 brew 'leiningen'
 
 # cask

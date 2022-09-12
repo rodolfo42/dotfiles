@@ -50,15 +50,22 @@ function set_theme {
   sed -i '.bak' s/^ZSH_THEME=".*"$/ZSH_THEME=\"$theme\"/g ~/.zshrc
 }
 
+function install_prettyping {
+  if [ ! -f "$HOME/bin/prettyping" ]; then
+    mkdir -p $HOME/bin && cd $HOME/bin && curl -O https://raw.githubusercontent.com/denilsonsa/prettyping/master/prettyping
+    chmod +x $HOME/bin/prettyping
+  fi
+}
+
 describe_step "Check for .zshrc file" test -f ~/.zshrc
 
 describe_step "Check for .oh-my-zsh folder" test -d ~/.oh-my-zsh
 
-step /bin/ln -sf ~/.dotfiles/.bashrc ~/.bashrc
+describe_step "Link .bashrc" /bin/ln -sf ~/.dotfiles/.bashrc ~/.bashrc
 
-step /bin/ln -sf ~/.dotfiles/.gitignore_global ~/.gitignore_global
+describe_step "Link .gitignore_global" /bin/ln -sf ~/.dotfiles/.gitignore_global ~/.gitignore_global
 
-step /bin/ln -sf ~/.dotfiles/r42.zsh-theme ~/.oh-my-zsh/themes/r42.zsh-theme
+describe_step "Link r42.zsh-theme" /bin/ln -sf ~/.dotfiles/r42.zsh-theme ~/.oh-my-zsh/themes/r42.zsh-theme
 
 describe_step "Set zsh theme to r42" set_theme "r42"
 
@@ -77,11 +84,13 @@ step brew bundle --file ~/.dotfiles/Brewfile
 ### Python ###
 [ ! -f "/usr/local/bin/python" ] || step brew uninstall --ignore-dependencies python
 
-step pyenv install --skip-existing 3.10.4
+step pyenv install --skip-existing 3.10.6
 
-step pyenv global 3.10.4
+step pyenv global 3.10.6
 
 describe_step "Include .bashrc in .zshrc" "grep -qxF 'source ~/.bashrc' ~/.zshrc || echo 'source ~/.bashrc' >> ~/.zshrc"
+
+describe_step "Install prettyping" install_prettyping
 
 echo
 echo -e "-> Log available in: $HOME/.dotfiles/setup.log"

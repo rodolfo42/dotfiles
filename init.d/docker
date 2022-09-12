@@ -1,5 +1,0 @@
-#!/bin/bash -e
-
-alias enter_container="docker exec -it \$(docker ps -n 1 -q) /bin/bash"
-alias clean_dangling_images='docker images -q --filter=dangling=true | xargs docker rmi -f'
-alias remove_containers='docker ps -aq | xargs docker rm -f'
