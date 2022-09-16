@@ -67,6 +67,11 @@ function install_aws {
   fi
 }
 
+function install_docopts {
+  curl -s -o $HOME/bin/docopts https://github.com/docopt/docopts/releases/download/v0.6.4-with-no-mangle-double-dash/docopts_darwin_amd64
+  chmod ugo+x $HOME/bin/docopts
+}
+
 describe_step "Check for .zshrc file" test -f ~/.zshrc
 
 describe_step "Check for .oh-my-zsh folder" test -d ~/.oh-my-zsh
@@ -79,6 +84,8 @@ describe_step "Link r42.zsh-theme" /bin/ln -sf ~/.dotfiles/r42.zsh-theme ~/.oh-m
 
 describe_step "Set zsh theme to r42" set_theme "r42"
 
+
+## homebrew
 if [ -x "$(which brew)" ]; then
   skip "Skipping homebrew installation"
 else
@@ -91,7 +98,7 @@ step brew tap homebrew/bundle
 
 step brew bundle --file ~/.dotfiles/Brewfile
 
-### Python ###
+## python
 [ -f "/opt/homebrew/bin/python3" ] && step brew uninstall --ignore-dependencies python
 
 step pyenv install --skip-existing 3.10.6
@@ -100,9 +107,15 @@ step pyenv global 3.10.6
 
 describe_step "Upgrade pip" pyenv exec pip install --upgrade pip
 
+describe_step "Install visidata" pyenv exec pip install visidata
+
+
+## utils
 describe_step "Install prettyping" install_prettyping
 
 describe_step "Install AWS CLI" install_aws
+
+describe_step "Install docopts" install_docopts
 
 describe_step "Include .bashrc in .zshrc" "grep -qxF 'source ~/.bashrc' ~/.zshrc || echo 'source ~/.bashrc' >> ~/.zshrc"
 

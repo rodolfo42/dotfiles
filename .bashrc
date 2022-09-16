@@ -94,11 +94,17 @@ alias getp='ps axu | grep -v grep | grep -i '
 alias speedtest='wget -O /dev/null http://speedtest.wdc01.softlayer.com/downloads/test100.zip'
 alias ip='ifconfig | grep -e '\''inet [0-9]'\'' | grep -ve '\''inet 127'\'' | awk -F '\'' '\'' '\''{print $2; }'\'' | tr -d '\''\n'\'''
 alias fastping='prettyping --nounicode -i 0.1'
+alias vdj=vd --filetype json
 
 
 #python
 if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
+fi
+
+#go
+if [ -d "$HOME/go/bin" ]; then
+  export PATH=$HOME/go/bin:$PATH
 fi
 
 #utils
