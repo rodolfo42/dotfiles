@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/zsh -o pipefail
 
 color_desc="\033[36m\u27F3 "
 color_cmd="\033[30;1m"
@@ -107,7 +107,7 @@ step pyenv global 3.10.6
 
 describe_step "Upgrade pip" pyenv exec pip install --upgrade pip
 
-describe_step "Install visidata" pyenv exec pip install visidata
+describe_step "Install visidata" "command -v vd || pyenv exec pip install visidata"
 
 
 ## utils
