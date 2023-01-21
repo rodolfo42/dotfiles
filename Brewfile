@@ -7,7 +7,6 @@ brew 'z'
 brew 'ncdu'
 brew 'neovim'
 brew 'bat'
-brew 'k9s'
 
 # GNU
 brew 'gawk'
@@ -31,10 +30,6 @@ brew 'wget'
 brew 'pyenv'
 brew 'npm'
 brew 'clojure'
-brew 'clojure-lsp/brew/clojure-lsp-native'
-brew 'borkdude/brew/babashka'
-brew 'leiningen'
-brew 'go'
 
 # cask
 cask_args appdir: '/Applications'
@@ -43,9 +38,7 @@ cask 'docker'
 cask 'temurin'
 
 # cask 'google-chrome'
-cask 'slack'
 cask 'spotify'
 cask 'iterm2'
-cask 'gather'
 cask 'rectangle'
 cask 'visual-studio-code'

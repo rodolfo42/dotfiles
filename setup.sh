@@ -7,6 +7,8 @@ reset="\033[0m"
 success="\033[32m\u2713 "
 fail="\033[31m\u2717 "
 
+profile=$1
+
 echo "\n=== $(date)\n" >> $HOME/.dotfiles/setup.log
 
 function describe_step {
@@ -97,6 +99,10 @@ fi
 step brew tap homebrew/bundle
 
 step brew bundle --file ~/.dotfiles/Brewfile
+
+if [ ! -z "$profile" ];
+  step brew bundle --file ~/.dotfiles/Brewfile.$profile
+fi
 
 ## python
 [ -f "/opt/homebrew/bin/python3" ] && step brew uninstall --ignore-dependencies python
