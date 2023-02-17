@@ -86,6 +86,9 @@ export HISTSIZE=1000000000
 setopt HIST_FIND_NO_DUPS
 setopt INC_APPEND_HISTORY
 
+# so that git commit sign works on osx
+export GPG_TTY=$TTY
+
 
 #aliases
 alias less="less -N"
@@ -95,7 +98,7 @@ alias speedtest='wget -O /dev/null http://speedtest.wdc01.softlayer.com/download
 alias ip='ifconfig | grep -e '\''inet [0-9]'\'' | grep -ve '\''inet 127'\'' | awk -F '\'' '\'' '\''{print $2; }'\'' | tr -d '\''\n'\'''
 alias fastping='prettyping --nounicode -i 0.1'
 alias vdj=vd --filetype json
-
+alias files="fd -t f | xargs bat"
 
 #python
 if command -v pyenv 1>/dev/null 2>&1; then
