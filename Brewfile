@@ -5,7 +5,6 @@ brew 'jq'
 brew 'ripgrep'
 brew 'z'
 brew 'ncdu'
-brew 'neovim'
 brew 'bat'
 
 # GNU
@@ -30,11 +29,11 @@ brew 'wget'
 brew 'pyenv'
 brew 'npm'
 brew 'clojure'
+brew 'colima'
 
 # cask
 cask_args appdir: '/Applications'
 cask 'stats'
-cask 'docker'
 cask 'temurin'
 
 # cask 'google-chrome'

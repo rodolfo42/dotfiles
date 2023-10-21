@@ -6,17 +6,14 @@ brew 'pyenv'
 brew 'npm'
 brew 'clojure'
 brew 'clojure-lsp/brew/clojure-lsp-native'
-brew 'borkdude/brew/babashka'
-brew 'go'
+brew 'colima'
 
 # cask
 cask_args appdir: '/Applications'
 cask 'stats'
-cask 'docker'
 cask 'temurin'
 
 # cask 'google-chrome'
 cask 'slack'
-cask 'gather'
 cask 'rectangle'
 cask 'visual-studio-code'
