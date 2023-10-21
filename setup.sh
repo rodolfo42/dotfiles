@@ -86,6 +86,7 @@ describe_step "Link r42.zsh-theme" /bin/ln -sf ~/.dotfiles/r42.zsh-theme ~/.oh-m
 
 describe_step "Set zsh theme to r42" set_theme "r42"
 
+step touch ~/.hushlogin
 
 ## homebrew
 if [ -x "$(which brew)" ]; then
