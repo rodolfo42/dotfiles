@@ -115,6 +115,9 @@ function timestamp() {
   date -j -f '%Y-%m-%d %H:%M:%S' "$1" +%s
 }
 
+#intellij
+PATH=$PATH:/Applications/IntelliJ\ IDEA\ CE.app/Contents/MacOS
+
 function sizes {
 	gdu -ad1 $1 | sort -nr | while read size fname
 	do
