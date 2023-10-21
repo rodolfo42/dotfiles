@@ -100,7 +100,7 @@ step brew tap homebrew/bundle
 
 step brew bundle --file ~/.dotfiles/Brewfile
 
-if [ ! -z "$profile" ];
+if [ ! -z "$profile" ]; then
   step brew bundle --file ~/.dotfiles/Brewfile.$profile
 fi
 
