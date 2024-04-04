@@ -73,7 +73,7 @@ alias gdiff='git diff --no-index -- '
 
 # homebrew
 [ -f "/opt/homebrew/bin/brew" ] && eval "$(/opt/homebrew/bin/brew shellenv)"
-
+export HOMEBREW_NO_AUTO_UPDATE=1
 [ -f "/opt/homebrew/etc/profile.d/z.sh" ] && . /opt/homebrew/etc/profile.d/z.sh
 
 
@@ -118,7 +118,9 @@ function timestamp() {
 }
 
 #intellij
-PATH=$PATH:/Applications/IntelliJ\ IDEA\ CE.app/Contents/MacOS
+idea () {
+  open -na "IntelliJ IDEA CE.app" --args "$@"
+}
 
 function sizes {
 	gdu -ad1 $1 | sort -nr | while read size fname
