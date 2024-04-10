@@ -108,9 +108,9 @@ fi
 ## python
 [ -f "/opt/homebrew/bin/python3" ] && step brew uninstall --ignore-dependencies python
 
-step pyenv install --skip-existing 3.10.6
+step pyenv install --skip-existing 3.11.3
 
-step pyenv global 3.10.6
+step pyenv global 3.11.3
 
 describe_step "Upgrade pip" pyenv exec pip install --upgrade pip
 
