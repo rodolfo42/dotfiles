@@ -6,6 +6,7 @@ brew 'ripgrep'
 brew 'z'
 brew 'ncdu'
 brew 'bat'
+brew 'fzf'
 
 # GNU
 brew 'gawk'

@@ -73,7 +73,9 @@ alias gdiff='git diff --no-index -- '
 
 # homebrew
 [ -f "/opt/homebrew/bin/brew" ] && eval "$(/opt/homebrew/bin/brew shellenv)"
+
 export HOMEBREW_NO_AUTO_UPDATE=1
+
 [ -f "/opt/homebrew/etc/profile.d/z.sh" ] && . /opt/homebrew/etc/profile.d/z.sh
 
 
@@ -91,6 +93,8 @@ setopt INC_APPEND_HISTORY
 # so that git commit sign works on osx
 export GPG_TTY=$TTY
 
+# fzf
+eval "$(fzf --zsh)"
 
 #aliases
 alias less="less -N"
