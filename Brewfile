@@ -28,17 +28,10 @@ brew 'wget'
 
 # langs
 brew 'pyenv'
-brew 'npm'
-brew 'clojure'
-brew 'colima'
 
 # cask
 cask_args appdir: '/Applications'
 cask 'stats'
 cask 'temurin'
-
-# cask 'google-chrome'
-cask 'spotify'
 cask 'iterm2'
 cask 'rectangle'
-cask 'visual-studio-code'

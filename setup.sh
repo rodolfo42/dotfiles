@@ -97,8 +97,6 @@ else
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-step brew tap homebrew/bundle
-
 step brew bundle --file ~/.dotfiles/Brewfile
 
 if [ ! -z "$profile" ]; then
@@ -108,21 +106,16 @@ fi
 ## python
 [ -f "/opt/homebrew/bin/python3" ] && step brew uninstall --ignore-dependencies python
 
-step pyenv install --skip-existing 3.11.3
+step pyenv install --skip-existing 3.13.4
 
-step pyenv global 3.11.3
+step pyenv global 3.13.4
 
 describe_step "Upgrade pip" pyenv exec pip install --upgrade pip
 
 describe_step "Install visidata" "command -v vd || pyenv exec pip install visidata"
 
-
 ## utils
 describe_step "Install prettyping" install_prettyping
-
-describe_step "Install AWS CLI" install_aws
-
-describe_step "Install docopts" install_docopts
 
 describe_step "Include .bashrc in .zshrc" "grep -qxF 'source ~/.bashrc' ~/.zshrc || echo 'source ~/.bashrc' >> ~/.zshrc"
 
