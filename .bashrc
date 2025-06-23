@@ -169,6 +169,7 @@ plug () {
       fi
     else
       echo "⏳ $device_name ($address) not found in first (5s) inquiry, trying extended (20s) search..."
+      sleep 1
       if blueutil --inquiry 20 | grep -q "$address"; then
         echo "✅ Found $device_name ($address) in extended search, attempting to connect..."
         if ! blueutil --connect "$address"; then
