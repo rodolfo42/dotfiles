@@ -143,7 +143,7 @@ function sizes {
 	done
 }
 
-reset_mk () {
+plug () {
   local keyboard="1c-57-dc-8b-99-cb"
   local trackpad="8c-85-90-f2-e1-ac"
   local devices=("$keyboard" "$trackpad")
@@ -181,7 +181,7 @@ reset_mk () {
   done
 }
 
-unpair_mk () {
+unplug () {
   local keyboard="1c-57-dc-8b-99-cb"
   local trackpad="8c-85-90-f2-e1-ac"
   local devices=("$keyboard" "$trackpad")
