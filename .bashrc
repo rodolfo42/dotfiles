@@ -27,7 +27,7 @@ function dotfiles_save() {
     cd $DOTFILES_DIR &&
     (git diff --stat | cat) &&
     git add -A . &&
-    git commit -am"saving dotfiles as of $(date +"%d/%m/%Y")" &&
+    git commit -am"saving dotfiles as of $(date +"%b %d, %Y")" &&
     git push origin
   )
 }
@@ -40,7 +40,7 @@ function dotfiles_pull() {
   (
     cd $DOTFILES_DIR &&
     git stash -u &&
-    git pull --rebase origin master &&
+    git pull --rebase origin main &&
     git stash pop
   )
 }
@@ -94,7 +94,9 @@ setopt INC_APPEND_HISTORY
 export GPG_TTY=$TTY
 
 # fzf
-eval "$(fzf --zsh)"
+if command -v fzf &> /dev/null; then
+  eval "$(fzf --zsh)"
+fi
 
 #aliases
 alias less="less -N"
