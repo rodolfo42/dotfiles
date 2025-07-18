@@ -7,7 +7,8 @@ reset="\033[0m"
 success="\033[32m\u2713 "
 fail="\033[31m\u2717 "
 
-profile=$1
+PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH
 
 echo "\n=== $(date)\n" >> $HOME/.dotfiles/setup.log
 
@@ -17,21 +18,22 @@ function describe_step {
   cmd=$@
 
   echo -e "${color_desc}${desc_txt}${reset}"
-  # output=$(eval $cmd 2>&1)
-  eval $cmd 2>&1 | tee -a $HOME/.dotfiles/setup.log
+  
+  # Use a temporary file to capture output and preserve exit code
+  temp_output=$(mktemp)
+  eval $cmd > "$temp_output" 2>&1
   exit_code=$?
-  # TODO figure out how to tee + get original exit code + save output in a variable
-  # echo $output >> $HOME/.dotfiles/setup.log
+  output=$(cat "$temp_output")
+  # Only append to log file, don't display on screen
+  cat "$temp_output" >> $HOME/.dotfiles/setup.log
+  rm "$temp_output"
 
-  # back one line and clear it
-  # echo -e "\033[2A" && echo -en "\033[2K"
-
-  if [ $exit_code -eq "0" ]; then
+  if (( exit_code == 0 )); then
     echo -en "${success}${desc_txt}"
   else
     echo -e "${fail}${desc_txt}${reset}"
     echo -e "${color_cmd}${cmd}${reset}"
-    echo $output
+    echo "$output"
     echo
     echo -e "${fail}Aborting, see above output before continuing"
     exit $exit_code
@@ -89,30 +91,25 @@ describe_step "Set zsh theme to r42" set_theme "r42"
 step touch ~/.hushlogin
 
 ## homebrew
-if [ -x "$(which brew)" ]; then
+if [ -f "/opt/homebrew/bin/brew" ]; then
   skip "Skipping homebrew installation"
 else
   echo "Installing homebrew"
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+if [ -f "$HOME/bin/brew" ]; then
+  skip "Skipping brew wrapper installation"
+else
+  cat > "$HOME/bin/brew" <<EOF
+export HOMEBREW_NO_AUTO_UPDATE=1
+[ -f "/opt/homebrew/bin/brew" ] && eval "\$(/opt/homebrew/bin/brew shellenv)"
+brew "\$@"
+EOF
+  describe_step "Install brew wrapper" chmod +x "$HOME/bin/brew"
 fi
 
 step brew bundle --file ~/.dotfiles/Brewfile
-
-if [ ! -z "$profile" ]; then
-  step brew bundle --file ~/.dotfiles/Brewfile.$profile
-fi
-
-## python
-[ -f "/opt/homebrew/bin/python3" ] && step brew uninstall --ignore-dependencies python
-
-step pyenv install --skip-existing 3.13.4
-
-step pyenv global 3.13.4
-
-describe_step "Upgrade pip" pyenv exec pip install --upgrade pip
-
-describe_step "Install visidata" "command -v vd || pyenv exec pip install visidata"
 
 ## utils
 describe_step "Install prettyping" install_prettyping

@@ -1,6 +1,67 @@
 #!/bin/bash -e
 
+# uncomment following line to enable benchmark
+# DOTFILES_BENCHMARK=0
+
+PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
+
+if [ "$DOTFILES_BENCHMARK" -ge "1" ]; then
+  if ! command -v gdate &> /dev/null; then
+    # echo "⚠️  DOTFILES_BENCHMARK disabled: gdate not available" >&2
+    unset DOTFILES_BENCHMARK
+    return
+  fi
+
+  # Timing setup - colors and initial checkpoint
+  BASHRC_FIRST_CHECKPOINT=$(gdate +%s%3N)
+
+  if [ "$DOTFILES_BENCHMARK" -ge "2" ]; then
+    RED='\033[0;31m'
+    GREEN='\033[0;32m'
+    YELLOW='\033[1;33m'
+    BLUE='\033[0;34m'
+    PURPLE='\033[0;35m'
+    CYAN='\033[0;36m'
+    NC='\033[0m' # No Color
+  fi
+fi
+
+# Function to log checkpoint with elapsed time
+checkpoint() {
+  if [ "$DOTFILES_BENCHMARK" -lt "2" ]; then
+    return
+  fi
+  local current_time=$(gdate +%s%3N)
+  local time_unit="ms"
+  
+  local section_name="$1"
+  
+  if [ -n "$BASHRC_LAST_CHECKPOINT" ]; then
+    local elapsed=$((current_time - BASHRC_LAST_CHECKPOINT))
+    
+    # Choose color based on elapsed time
+    local color
+    if [ $elapsed -lt 10 ]; then
+      color="$GREEN"
+    elif [ $elapsed -lt 50 ]; then
+      color="$YELLOW"
+    else
+      color="$RED"
+    fi
+    
+    echo -e "${color}⏱️  ${section_name}: ${elapsed}${time_unit}${NC}" >&2
+  else
+    echo -e "${CYAN}🚀 Starting .bashrc timing: ${section_name}${NC}" >&2
+  fi
+  
+  BASHRC_LAST_CHECKPOINT=$current_time
+}
+
+checkpoint "Initialization"
+
 export DOTFILES_DIR=$(dirname $(readlink -n ~/.bashrc))
+
+checkpoint "Dotfiles dir setup"
 
 if [ -d "$DOTFILES_DIR/init.d/" ]; then
   for F in $DOTFILES_DIR/init.d/*; do
@@ -10,16 +71,13 @@ if [ -d "$DOTFILES_DIR/init.d/" ]; then
   done
 fi
 
+checkpoint "Init.d scripts sourced"
+
 # lein
 export LEIN_SUPPRESS_USER_LEVEL_REPO_WARNINGS=true
 export LEIN_JVM_OPTS="-XX:+TieredCompilation -XX:TieredStopAtLevel=1"
 
-
-# docker
-alias enter_container="docker exec -it \$(docker ps -n 1 -q) /bin/sh"
-alias clean_dangling_images='docker images -q --filter=dangling=true | xargs docker rmi -f'
-alias remove_containers='docker ps -aq | xargs docker rm -f'
-
+checkpoint "Lein configuration"
 
 # dotfiles
 function dotfiles_save() {
@@ -45,6 +103,7 @@ function dotfiles_pull() {
   )
 }
 
+checkpoint "Dotfiles functions"
 
 # git
 function bootstrap_git() {
@@ -70,14 +129,12 @@ function bootstrap_git() {
 
 alias gdiff='git diff --no-index -- '
 
+checkpoint "Git configuration"
 
-# homebrew
-[ -f "/opt/homebrew/bin/brew" ] && eval "$(/opt/homebrew/bin/brew shellenv)"
-
-export HOMEBREW_NO_AUTO_UPDATE=1
-
+# z
 [ -f "/opt/homebrew/etc/profile.d/z.sh" ] && . /opt/homebrew/etc/profile.d/z.sh
 
+checkpoint "z setup"
 
 #shell
 export PATH=$HOME/bin:/usr/local/bin:$PATH
@@ -93,10 +150,14 @@ setopt INC_APPEND_HISTORY
 # so that git commit sign works on osx
 export GPG_TTY=$TTY
 
+checkpoint "Shell configuration"
+
 # fzf
 if command -v fzf &> /dev/null; then
   eval "$(fzf --zsh)"
 fi
+
+checkpoint "FZF setup"
 
 #aliases
 alias less="less -N"
@@ -107,41 +168,6 @@ alias ip='ifconfig | grep -e '\''inet [0-9]'\'' | grep -ve '\''inet 127'\'' | aw
 alias fastping='prettyping --nounicode -i 0.1'
 alias vdj=vd --filetype json
 alias files="fd -t f | xargs bat"
-
-#python
-if command -v pyenv 1>/dev/null 2>&1; then
-  eval "$(pyenv init -)"
-fi
-
-#go
-if [ -d "$HOME/go/bin" ]; then
-  export PATH=$HOME/go/bin:$PATH
-fi
-
-#utils
-function timestamp() {
-  date -j -f '%Y-%m-%d %H:%M:%S' "$1" +%s
-}
-
-#intellij
-idea () {
-  open -na "IntelliJ IDEA CE.app" --args "$@"
-}
-
-function sizes {
-	gdu -ad1 $1 | sort -nr | while read size fname
-	do
-		for unit in k M G T P E Z Y
-		do
-			if [ $size -lt 1024 ]
-			then
-				echo -e "${size}${unit}\t${fname}"
-				break
-			fi
-			size=$((size/1024))
-		done
-	done
-}
 
 plug () {
   local keyboard="1c-57-dc-8b-99-cb"
@@ -206,3 +232,14 @@ unplug () {
   done
 }
 
+checkpoint "plug/unplug defined"
+
+# Final timing summary
+if [ "$DOTFILES_BENCHMARK" -ge "1" ]; then
+  final_time=$(gdate +%s%3N)
+  total_elapsed=$((final_time - BASHRC_FIRST_CHECKPOINT))
+  echo -e "🏁 Total .bashrc load time: ${total_elapsed}ms${NC}" >&2
+
+  # Clean up timing variables
+  unset BASHRC_FIRST_CHECKPOINT BASHRC_LAST_CHECKPOINT RED GREEN YELLOW BLUE PURPLE CYAN NC checkpoint final_time total_elapsed
+fi

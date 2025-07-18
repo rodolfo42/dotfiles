@@ -38,7 +38,7 @@ function directory_name {
 }
 
 function prompt_char {
-	if [ $UID -eq 0 ]; then echo "%{$fg[red]%}#%{$reset_color%}"; else echo $; fi
+	if [ $UID -eq 0 ]; then echo -e "%{$fg[red]%}#%{$reset_color%}"; else echo $; fi
 }
 
-PROMPT=$'%(?,,%{$fg[red]%}FAIL%{$reset_color%}\n\n)%{$FG[237]%}%*%{$reset_color%} $(directory_name)$(git_prompt_info) $(prompt_char) '
+PROMPT=$'%(?,,%{$fg[red]%}FAIL%{$reset_color%} )%{$FG[237]%}%*%{$reset_color%} $(directory_name)$(git_prompt_info) $(prompt_char) '
