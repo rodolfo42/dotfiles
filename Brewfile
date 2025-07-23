@@ -7,6 +7,7 @@ brew 'z'
 brew 'ncdu'
 brew 'bat'
 brew 'fzf'
+brew 'the_silver_searcher'
 
 # GNU
 brew 'gawk'
