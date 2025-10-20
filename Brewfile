@@ -36,6 +36,3 @@ cask 'stats'
 cask 'temurin'
 cask 'iterm2'
 cask 'rectangle'
-
-# brew 'k9s'
-# brew 'pyenv'

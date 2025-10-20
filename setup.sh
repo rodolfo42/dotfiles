@@ -8,9 +8,13 @@ success="\033[32m\u2713 "
 fail="\033[31m\u2717 "
 
 PATH=$HOME/bin:/usr/local/bin:$PATH
+
+LOGFILE="$HOME/.dotfiles/setup-$(date +%Y-%m-%d-%H-%M-%S).log"
+touch "$LOGFILE"
+
 export PATH
 
-echo "\n=== $(date)\n" >> $HOME/.dotfiles/setup.log
+echo "=> $(date)\n" >> $LOGFILE
 
 function describe_step {
   desc_txt="$1"
@@ -25,7 +29,7 @@ function describe_step {
   exit_code=$?
   output=$(cat "$temp_output")
   # Only append to log file, don't display on screen
-  cat "$temp_output" >> $HOME/.dotfiles/setup.log
+  cat "$temp_output" >> $LOGFILE
   rm "$temp_output"
 
   if (( exit_code == 0 )); then
@@ -49,33 +53,6 @@ function skip {
   describe_step $1
 }
 
-function set_theme {
-  local theme=$1
-  sed -i '.bak' s/^ZSH_THEME=".*"$/ZSH_THEME=\"$theme\"/g ~/.zshrc
-}
-
-function install_prettyping {
-  if [ ! -f "$HOME/bin/prettyping" ]; then
-    mkdir -p $HOME/bin && cd $HOME/bin && curl -O https://raw.githubusercontent.com/denilsonsa/prettyping/master/prettyping
-    chmod +x $HOME/bin/prettyping
-  fi
-}
-
-function install_aws {
-  if (which aws > /dev/null); then
-    echo "Skipping AWS CLI installation"
-  else
-    curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "/tmp/AWSCLIV2.pkg"
-    sudo installer -pkg /tmp/AWSCLIV2.pkg -target /
-    rm -rf /tmp/AWSCLIV2.pkg
-  fi
-}
-
-function install_docopts {
-  curl -s -o $HOME/bin/docopts https://github.com/docopt/docopts/releases/download/v0.6.4-with-no-mangle-double-dash/docopts_darwin_amd64
-  chmod ugo+x $HOME/bin/docopts
-}
-
 describe_step "Check for .zshrc file" test -f ~/.zshrc
 
 describe_step "Check for .oh-my-zsh folder" test -d ~/.oh-my-zsh
@@ -86,35 +63,62 @@ describe_step "Link .gitignore_global" /bin/ln -sf ~/.dotfiles/.gitignore_global
 
 describe_step "Link r42.zsh-theme" /bin/ln -sf ~/.dotfiles/r42.zsh-theme ~/.oh-my-zsh/themes/r42.zsh-theme
 
+function set_theme {
+  local theme=$1
+  sed -i '.bak' s/^ZSH_THEME=".*"$/ZSH_THEME=\"$theme\"/g ~/.zshrc
+}
 describe_step "Set zsh theme to r42" set_theme "r42"
 
-step touch ~/.hushlogin
+function bootstrap_git {
+  git config --global pull.rebase true
+  git config --global alias.co checkout
+  git config --global alias.st status
 
-## homebrew
+  git config --global push.default simple
+
+  # global gitignore
+  git config --global core.excludesfile $DOTFILES_DIR/.gitignore_global
+
+  # turn of advices
+  git config --global advice.pushnonfastforward false
+  git config --global advice.statushints false
+  git config --global advice.commitbeforemerge false
+  git config --global advice.resolveconflict false
+  git config --global advice.implicitidentity false
+  git config --global advice.detachedhead false
+}
+describe_step "Bootstrap git" bootstrap_git
+
+describe_step "Touch .hushlogin" "touch ~/.hushlogin"
+
+function install_homebrew {
+  echo "Installing homebrew"
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+}
 if [ -f "/opt/homebrew/bin/brew" ]; then
   skip "Skipping homebrew installation"
 else
-  echo "Installing homebrew"
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  describe_step "Install Homebrew" install_homebrew
 fi
 
-if [ -f "$HOME/bin/brew" ]; then
-  skip "Skipping brew wrapper installation"
-else
-  cat > "$HOME/bin/brew" <<EOF
-export HOMEBREW_NO_AUTO_UPDATE=1
-[ -f "/opt/homebrew/bin/brew" ] && eval "\$(/opt/homebrew/bin/brew shellenv)"
-brew "\$@"
-EOF
-  describe_step "Install brew wrapper" chmod +x "$HOME/bin/brew"
-fi
-
-step brew bundle --file ~/.dotfiles/Brewfile
+function install_brew_bundle {
+  brew bundle --file ~/.dotfiles/Brewfile
+}
+describe_step "Install brew bundle" install_brew_bundle
 
 ## utils
+function install_prettyping {
+  if [ ! -f "$HOME/bin/prettyping" ]; then
+    mkdir -p $HOME/bin && cd $HOME/bin && curl -O https://raw.githubusercontent.com/denilsonsa/prettyping/master/prettyping
+    chmod +x $HOME/bin/prettyping
+  fi
+}
 describe_step "Install prettyping" install_prettyping
 
-describe_step "Include .bashrc in .zshrc" "grep -qxF 'source ~/.bashrc' ~/.zshrc || echo 'source ~/.bashrc' >> ~/.zshrc"
+function include_bashrc {
+  grep -qxF 'source ~/.bashrc' ~/.zshrc || echo 'source ~/.bashrc' >> ~/.zshrc
+}
+describe_step "Include .bashrc in .zshrc" include_bashrc
 
 echo
-echo -e "-> Log available in: $HOME/.dotfiles/setup.log"
+echo -e "-> Log available in: $LOGFILE"
