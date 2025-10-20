@@ -118,7 +118,9 @@ describe_step "Install prettyping" install_prettyping
 function include_bashrc {
   grep -qxF 'source ~/.bashrc' ~/.zshrc || echo 'source ~/.bashrc' >> ~/.zshrc
 }
-describe_step "Include .bashrc in .zshrc" include_bashrc
+describe_step "Source .bashrc in .zshrc" include_bashrc
+
+describe_step "Link .vimrc" ln -sf $DOTFILES_DIR/.vimrc ~/.vimrc
 
 echo
 echo -e "-> Log available in: $LOGFILE"

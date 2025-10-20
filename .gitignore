@@ -1,2 +1,2 @@
 **/*.private
-setup.log
+*.log
