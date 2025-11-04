@@ -4,7 +4,7 @@ plug () {
   local devices=("$keyboard" "$trackpad")
 
   for address in "${devices[@]}"; do
-    if [[ "$address" == *"cb" ]]; then
+    if [[ "$address" == $KEYBOARD_ADDRESS ]]; then
       local device_name="⌨️ Keyboard"
     else
       local device_name="⬜️ Trackpad"
@@ -43,7 +43,7 @@ unplug () {
   local devices=("$keyboard" "$trackpad")
 
   for address in "${devices[@]}"; do
-    if [[ "$address" == *"cb" ]]; then
+    if [[ "$address" == $KEYBOARD_ADDRESS ]]; then
       local device_name="⌨️ Keyboard"
     else
       local device_name="⬜️ Trackpad"
