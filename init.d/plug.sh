@@ -1,21 +1,21 @@
 plug () {
-  local keyboard="1c-57-dc-8b-99-cb"
-  local trackpad="8c-85-90-f2-e1-ac"
+  local keyboard=$KEYBOARD_ADDRESS
+  local trackpad=$TRACKPAD_ADDRESS
   local devices=("$keyboard" "$trackpad")
-  
+
   for address in "${devices[@]}"; do
     if [[ "$address" == *"cb" ]]; then
       local device_name="⌨️ Keyboard"
     else
       local device_name="⬜️ Trackpad"
     fi
-    
+
     echo "--------------------------------"
     echo "Processing $device_name ($address)"
-    
+
     echo "🔌 Unpairing $device_name ($address)..."
     blueutil --unpair "$address" 2>/dev/null || true
-    
+
     echo "🔍 Searching for $device_name ($address)..."
     if blueutil --inquiry 5 | grep -q "$address"; then
       echo "🟢 Found $device_name ($address), attempting to connect..."
@@ -38,20 +38,20 @@ plug () {
 }
 
 unplug () {
-  local keyboard="1c-57-dc-8b-99-cb"
-  local trackpad="8c-85-90-f2-e1-ac"
+  local keyboard=$KEYBOARD_ADDRESS
+  local trackpad=$TRACKPAD_ADDRESS
   local devices=("$keyboard" "$trackpad")
-  
+
   for address in "${devices[@]}"; do
     if [[ "$address" == *"cb" ]]; then
       local device_name="⌨️ Keyboard"
     else
       local device_name="⬜️ Trackpad"
     fi
-    
+
     echo "--------------------------------"
     echo "⚙️ Processing $device_name ($address)"
-    
+
     echo "🔌 Unpairing $device_name ($address)..."
     if blueutil --unpair "$address" 2>/dev/null; then
       echo "🟢 Successfully unpaired $device_name ($address)"
